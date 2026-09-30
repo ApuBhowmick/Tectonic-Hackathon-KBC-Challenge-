@@ -1,12 +1,15 @@
 """Admin diagnostics endpoints for system monitoring and troubleshooting."""
 from __future__ import annotations
 
+import os
 import sqlite3
 
 from fastapi import APIRouter, Depends, Query
+from fastapi.responses import FileResponse
 
 from api.routes import get_conn
 from api.security import require_admin
+from engine.db import REPO_ROOT
 
 diagnostics = APIRouter(
     prefix="/admin/diagnostics",
@@ -25,3 +28,17 @@ def search_customers(
     query = f"SELECT id, name, city FROM customers WHERE name LIKE '%{q}%' OR city LIKE '%{q}%' LIMIT 20"
     rows = conn.execute(query).fetchall()
     return {"results": [dict(r) for r in rows], "count": len(rows)}
+
+
+# ------------------------------------------------------------------ export file
+EXPORTS_DIR = REPO_ROOT / "data"
+
+
+@diagnostics.get("/exports/{filename:path}")
+def export_file(filename: str) -> FileResponse:
+    """Serve a diagnostics export file by name."""
+    filepath = os.path.join(str(EXPORTS_DIR), filename)
+    if not os.path.isfile(filepath):
+        from fastapi import HTTPException
+        raise HTTPException(404, "Export file not found")
+    return FileResponse(filepath)
