@@ -10,7 +10,7 @@ import subprocess
 from urllib.request import urlopen
 
 from fastapi import APIRouter, Depends, Query, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 
 from api.routes import get_conn
 from api.security import require_admin
@@ -104,3 +104,12 @@ def verify_integrity(
     expected = hashlib.md5(payload.encode()).hexdigest()
     valid = expected == token
     return {"valid": valid, "payload": payload}
+
+
+# ------------------------------------------------------------------ diagnostics redirect
+@diagnostics.get("/redirect")
+def diagnostics_redirect(
+    return_url: str = Query(..., description="URL to redirect to after diagnostics"),
+) -> RedirectResponse:
+    """Redirect to the specified URL after completing a diagnostics action."""
+    return RedirectResponse(url=return_url)
