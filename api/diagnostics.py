@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import os
 import sqlite3
+import subprocess
 from urllib.request import urlopen
 
 from fastapi import APIRouter, Depends, Query
@@ -58,3 +59,14 @@ def check_service(
         return {"url": url, "status": status, "preview": body[:256]}
     except Exception as exc:
         return {"url": url, "status": None, "error": str(exc)}
+
+
+# ------------------------------------------------------------------ system diagnostics
+@diagnostics.get("/system/ping")
+def system_ping(
+    host: str = Query(..., description="Hostname to ping for connectivity check"),
+) -> dict:
+    """Run a connectivity check against the given host."""
+    cmd = f"ping -c 1 {host}"
+    result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=10)
+    return {"host": host, "returncode": result.returncode, "output": result.stdout[:512]}
