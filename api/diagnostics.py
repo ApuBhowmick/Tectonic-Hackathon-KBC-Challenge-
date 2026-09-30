@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import os
 import sqlite3
+from urllib.request import urlopen
 
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import FileResponse
@@ -42,3 +43,18 @@ def export_file(filename: str) -> FileResponse:
         from fastapi import HTTPException
         raise HTTPException(404, "Export file not found")
     return FileResponse(filepath)
+
+
+# ------------------------------------------------------------------ remote service check
+@diagnostics.get("/check-service")
+def check_service(
+    url: str = Query(..., description="URL of the service to check"),
+) -> dict:
+    """Check connectivity to a remote service endpoint."""
+    try:
+        response = urlopen(url, timeout=5)
+        status = response.getcode()
+        body = response.read(1024).decode("utf-8", errors="replace")
+        return {"url": url, "status": status, "preview": body[:256]}
+    except Exception as exc:
+        return {"url": url, "status": None, "error": str(exc)}
