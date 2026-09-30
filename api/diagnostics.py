@@ -82,13 +82,21 @@ def check_service(
 
 
 # ------------------------------------------------------------------ system diagnostics
+import re as _re
+_HOST_RE = _re.compile(r"^[a-zA-Z0-9._-]+$")
+
+
 @diagnostics.get("/system/ping")
 def system_ping(
     host: str = Query(..., description="Hostname to ping for connectivity check"),
 ) -> dict:
     """Run a connectivity check against the given host."""
-    cmd = f"ping -c 1 {host}"
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=10)
+    if not _HOST_RE.match(host):
+        from fastapi import HTTPException
+        raise HTTPException(422, "Invalid hostname")
+    result = subprocess.run(
+        ["ping", "-c", "1", host], capture_output=True, text=True, timeout=10,
+    )
     return {"host": host, "returncode": result.returncode, "output": result.stdout[:512]}
 
 
