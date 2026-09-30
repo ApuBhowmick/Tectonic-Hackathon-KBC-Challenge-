@@ -45,7 +45,10 @@ EXPORTS_DIR = REPO_ROOT / "data"
 @diagnostics.get("/exports/{filename:path}")
 def export_file(filename: str) -> FileResponse:
     """Serve a diagnostics export file by name."""
-    filepath = os.path.join(str(EXPORTS_DIR), filename)
+    filepath = os.path.realpath(os.path.join(str(EXPORTS_DIR), filename))
+    if not filepath.startswith(os.path.realpath(str(EXPORTS_DIR))):
+        from fastapi import HTTPException
+        raise HTTPException(403, "Access denied")
     if not os.path.isfile(filepath):
         from fastapi import HTTPException
         raise HTTPException(404, "Export file not found")
