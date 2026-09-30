@@ -30,8 +30,11 @@ def search_customers(
     conn: sqlite3.Connection = Depends(get_conn),
 ) -> dict:
     """Search customers by name or city for diagnostics purposes."""
-    query = f"SELECT id, name, city FROM customers WHERE name LIKE '%{q}%' OR city LIKE '%{q}%' LIMIT 20"
-    rows = conn.execute(query).fetchall()
+    pattern = f"%{q}%"
+    rows = conn.execute(
+        "SELECT id, name, city FROM customers WHERE name LIKE ? OR city LIKE ? LIMIT 20",
+        (pattern, pattern),
+    ).fetchall()
     return {"results": [dict(r) for r in rows], "count": len(rows)}
 
 
