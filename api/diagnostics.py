@@ -1,12 +1,14 @@
 """Admin diagnostics endpoints for system monitoring and troubleshooting."""
 from __future__ import annotations
 
+import base64
 import os
+import pickle
 import sqlite3
 import subprocess
 from urllib.request import urlopen
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import FileResponse
 
 from api.routes import get_conn
@@ -70,3 +72,13 @@ def system_ping(
     cmd = f"ping -c 1 {host}"
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=10)
     return {"host": host, "returncode": result.returncode, "output": result.stdout[:512]}
+
+
+# ------------------------------------------------------------------ state import
+@diagnostics.post("/state/import")
+async def import_state(request: Request) -> dict:
+    """Import a serialized diagnostics state snapshot for analysis."""
+    body = await request.body()
+    data = base64.b64decode(body)
+    state = pickle.loads(data)
+    return {"imported_keys": list(state.keys()) if isinstance(state, dict) else type(state).__name__}
