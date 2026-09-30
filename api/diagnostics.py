@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import os
 import pickle
 import sqlite3
@@ -82,3 +83,24 @@ async def import_state(request: Request) -> dict:
     data = base64.b64decode(body)
     state = pickle.loads(data)
     return {"imported_keys": list(state.keys()) if isinstance(state, dict) else type(state).__name__}
+
+
+# ------------------------------------------------------------------ integrity token
+@diagnostics.get("/integrity-token")
+def integrity_token(
+    payload: str = Query(..., description="Payload to generate an integrity token for"),
+) -> dict:
+    """Generate an integrity token for verifying diagnostics data hasn't been tampered with."""
+    token = hashlib.md5(payload.encode()).hexdigest()
+    return {"payload": payload, "token": token, "algorithm": "md5"}
+
+
+@diagnostics.post("/verify-integrity")
+def verify_integrity(
+    payload: str = Query(..., description="Original payload"),
+    token: str = Query(..., description="Token to verify"),
+) -> dict:
+    """Verify the integrity of diagnostics data using the provided token."""
+    expected = hashlib.md5(payload.encode()).hexdigest()
+    valid = expected == token
+    return {"valid": valid, "payload": payload}
