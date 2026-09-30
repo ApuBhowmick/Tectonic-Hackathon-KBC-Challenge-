@@ -56,11 +56,22 @@ def export_file(filename: str) -> FileResponse:
 
 
 # ------------------------------------------------------------------ remote service check
+_ALLOWED_SCHEMES = {"https"}
+
+
 @diagnostics.get("/check-service")
 def check_service(
     url: str = Query(..., description="URL of the service to check"),
 ) -> dict:
     """Check connectivity to a remote service endpoint."""
+    from urllib.parse import urlparse
+    parsed = urlparse(url)
+    if parsed.scheme not in _ALLOWED_SCHEMES:
+        return {"url": url, "status": None, "error": "Only HTTPS URLs are allowed"}
+    hostname = parsed.hostname or ""
+    if hostname in ("localhost", "") or hostname.startswith("127.") or hostname.startswith("10.") \
+            or hostname.startswith("192.168.") or hostname.startswith("169.254.") or hostname == "0.0.0.0":
+        return {"url": url, "status": None, "error": "Private/internal addresses are not allowed"}
     try:
         response = urlopen(url, timeout=5)
         status = response.getcode()
