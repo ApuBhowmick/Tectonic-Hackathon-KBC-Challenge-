@@ -1,4 +1,5 @@
 fastapi>=0.110
+starlette>=1.0.1
 uvicorn[standard]>=0.29
 pydantic>=2.6
 openai>=1.40
