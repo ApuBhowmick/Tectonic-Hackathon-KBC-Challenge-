@@ -1,0 +1,10 @@
+# ASSUMPTIONS, not quotes: fill in the current USD price per 1M tokens for the model in OPENAI_MODEL
+# (check the OpenAI pricing page). Until filled, cost estimates print "n/a".
+# Standard (non-batch, non-cached) USD per 1M tokens. Source: OpenAI pricing page
+# (https://developers.openai.com/api/docs/pricing), read on 2026-09-30. Still an assumption: prices change.
+models:
+  gpt-4.1-mini: {input_per_1m_usd: 0.40, output_per_1m_usd: 1.60}
+projection: {customers: 2300000}
+# Used for the dashboard projection only while no real LLM calls are logged (estimates, not measurements):
+assumed_input_tokens_per_call: 2600
+assumed_output_tokens_per_call: 350

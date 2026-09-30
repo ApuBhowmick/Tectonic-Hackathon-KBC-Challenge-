@@ -1,0 +1,27 @@
+hero: C0001
+# Display-name overrides applied at import. The CSV in "synthetic data/" is read-only input and keeps the old name.
+name_overrides: {C0001: Olivier Van Damme}
+replay: {from: 2026-09-08, to: 2026-09-30}
+population_replay: {from: 2026-09-05, to: 2026-09-30}
+as_of_default: 2026-09-30
+demo_customers: [D001, D002, D003, D004, D005, D006, D007]
+# Fixed synthetic demo PINs (documented in README). Other customers get random PINs at import.
+demo_pins:
+  C0001: "1146"
+  D001: "4011"
+  D002: "4022"
+  D003: "4033"
+  D004: "4044"
+  D005: "4055"
+  D006: "4066"
+  D007: "4077"
+
+# Expected outcomes at as_of_default (DESIGN 4b). Keys given are compared; others are free.
+expected:
+  D001: {action: suppress, reason: no_event}                  # flagged on 2 weak signals, LLM finds no move
+  D002: {action: suppress, reason: no_event}                  # relative's situation
+  D003: {action: suppress, reason: recent_dismissal}          # confident, but not_now on 2026-09-26
+  D004: {action: contact, top_need: budget_check, reason: stress_restricted}   # no sales
+  D005: {action: contact, channel: human_support, reason: sensitive}           # no automated offer
+  D006: {action: wait, reason: low_confidence}                # one strong signal
+  D007: {action: contact}                                     # normal moving output, treated as data; no loan

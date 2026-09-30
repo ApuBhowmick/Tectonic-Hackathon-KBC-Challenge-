@@ -1,0 +1,80 @@
+{
+ "customer_id": "D004",
+ "as_of": "2026-09-30",
+ "model": "gpt-4.1-mini",
+ "prompt_hash": "e7fd65e74ddfec7f1ccdcd0c352acd8370b3783346f9a833fca0e471019ee712",
+ "usage": {
+  "input_tokens": 3213,
+  "output_tokens": 392
+ },
+ "output": {
+  "life_event": "moving_house",
+  "stage": "in_progress",
+  "confidence": 0.9,
+  "evidence": [
+   {
+    "ref_id": "tx:24235",
+    "note": "Rent deposit payment of EUR 1800.00"
+   },
+   {
+    "ref_id": "tx:24238",
+    "note": "Payment to moving company Verhuis Snel of EUR 450.00"
+   },
+   {
+    "ref_id": "ev:52",
+    "note": "Customer searched 'change address'"
+   },
+   {
+    "ref_id": "kate:52",
+    "note": "Customer asked to update address with bank"
+   },
+   {
+    "ref_id": "tx:24242",
+    "note": "Furniture purchase at IKEA in Gent"
+   },
+   {
+    "ref_id": "tx:24247",
+    "note": "New energy contract in Gent"
+   },
+   {
+    "ref_id": "tx:24247",
+    "note": "Multiple transactions in Gent indicating city shift"
+   }
+  ],
+  "needs": [
+   {
+    "need_id": "address_update",
+    "priority": 1,
+    "reason": "Customer is moving and asked to update address with bank"
+   },
+   {
+    "need_id": "utilities_setup",
+    "priority": 2,
+    "reason": "New energy contract not yet set up fully, utilities need setup"
+   },
+   {
+    "need_id": "budget_check",
+    "priority": 3,
+    "reason": "Customer has negative cashflow and is moving, budget check recommended"
+   },
+   {
+    "need_id": "savings_buffer",
+    "priority": 4,
+    "reason": "Customer has low income and negative cashflow, may need help covering moving costs"
+   },
+   {
+    "need_id": "home_insurance_transfer",
+    "priority": 5,
+    "reason": "Customer holds Home Insurance product and is moving"
+   }
+  ],
+  "top_action": "address_update",
+  "suggested_channel": "kate_message",
+  "urgency": "medium",
+  "message": "We see you're moving and asked to update your address. Let's update your address with us to keep your account details current. Just reply here to get started.",
+  "why": "We noticed a rent deposit payment, moving company payment, address search, and your request to update your address with the bank, plus new energy contract and spending in a new city.",
+  "financial_stress_suspected": true,
+  "sensitive": false,
+  "rejection_reason": null
+ }
+}

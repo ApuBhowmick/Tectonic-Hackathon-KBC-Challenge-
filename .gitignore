@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+data/llm_cache/
+data/*.db
+node_modules/
+web/dist/
+
+# Internal planning documents (not part of the submission)
+CLAUDE.md
+DESIGN.md
+TECH_SPEC.md
+IMPLEMENTATION_PLAN.md

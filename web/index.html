@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Life Moments</title>
+<style>
+  :root {
+    --accent: #0b5cab; --accent-ink: #ffffff; --accent-soft: #e6f0fb;
+    --bg: #f4f6f9; --panel: #ffffff; --ink: #14202e; --muted: #5d6b7c; --line: #dde3ea;
+    --radius: 14px; --warn-bg: #fff6e0; --warn-ink: #6b4a00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --accent: #5aa2ee; --accent-ink: #06203d; --accent-soft: #14304f; --bg: #0f151c; --panel: #18212b;
+            --ink: #e8eef5; --muted: #9aa8b8; --line: #2a3643; --warn-bg: #3a2e10; --warn-ink: #f3d58a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding: 14px 16px 0; max-width: 1040px; margin: 0 auto; }
+  h1 { font-size: 20px; margin: 0 0 2px; }
+  .sub { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+  nav { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+  nav button { background: none; border: 0; padding: 10px 16px; font: inherit; color: var(--muted); cursor: pointer;
+               border-bottom: 3px solid transparent; margin-bottom: -1px; }
+  nav button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  main { max-width: 1040px; margin: 0 auto; padding: 16px; }
+  section[hidden] { display: none; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+  .banner { background: var(--warn-bg); color: var(--warn-ink); border-radius: 10px; padding: 8px 12px; font-size: 13px; margin-bottom: 12px; }
+  button.btn { font: inherit; border-radius: 10px; padding: 11px 14px; cursor: pointer; border: 1px solid var(--accent);
+               background: var(--accent); color: var(--accent-ink); font-weight: 600; width: 100%; }
+  button.btn.ghost { background: transparent; color: var(--accent); }
+  button.btn.plain { background: transparent; color: var(--muted); border-color: transparent; font-weight: 500; }
+  button.btn:disabled { opacity: .5; cursor: default; }
+  input[type=text], input[type=password] { font: inherit; width: 100%; padding: 10px 12px; border-radius: 10px;
+               border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 10px 0 4px; }
+  .err { color: #b3261e; font-size: 13px; min-height: 18px; margin-top: 8px; }
+  @media (prefers-color-scheme: dark) { .err { color: #ff8a80; } }
+  .muted { color: var(--muted); }
+  .pill { display: inline-block; font-size: 12px; padding: 2px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .pill.grey { background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+  .pill.solid { background: var(--accent); color: var(--accent-ink); }
+
+  /* phone */
+  .stage { display: flex; justify-content: center; }
+  .phone { width: 340px; height: 660px; border-radius: 42px; border: 10px solid #1b2430; background: var(--bg);
+           box-shadow: 0 14px 40px rgba(0,0,0,.25); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+  .notch { width: 110px; height: 22px; background: #1b2430; border-radius: 0 0 16px 16px; align-self: center; flex: none; }
+  .screen { flex: 1; overflow-y: auto; padding: 14px; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .topbar b { font-size: 17px; }
+  .kate { border-left: 4px solid var(--accent); }
+  .kate .who { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; }
+  .avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--accent-ink);
+            display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+  .stack { display: grid; gap: 8px; margin-top: 12px; }
+  .link { background: none; border: 0; color: var(--accent); font: inherit; cursor: pointer; padding: 6px 0; text-align: left; }
+  ul.clean { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+  ul.clean li { font-size: 13px; padding: 8px 10px; background: var(--bg); border-radius: 10px; }
+  .tick { color: var(--accent); font-weight: 700; margin-right: 6px; }
+  .big { font-size: 34px; text-align: center; color: var(--accent); }
+
+  /* replay */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } .phone { width: 100%; max-width: 340px; } }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .bar { height: 14px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line); position: relative; overflow: hidden; }
+  .bar > i { position: absolute; inset: 0 auto 0 0; background: var(--accent); transition: width .2s; }
+  .bar > u { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); opacity: .6; }
+  .sig { display: flex; gap: 8px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .sig:last-child { border-bottom: 0; }
+  .sig time { color: var(--muted); min-width: 78px; font-variant-numeric: tabular-nums; }
+  svg.spark { width: 100%; height: 90px; }
+
+  /* admin */
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+  .kpi { background: var(--bg); border-radius: 12px; padding: 10px 12px; }
+  .kpi b { display: block; font-size: 24px; font-variant-numeric: tabular-nums; }
+  .kpi span { font-size: 12px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .hb { display: grid; grid-template-columns: 150px 1fr 48px; gap: 8px; align-items: center; font-size: 13px; margin: 5px 0; }
+  .hb .bar { height: 10px; }
+  h2 { font-size: 16px; margin: 0 0 8px; }
+  .gap { display: grid; gap: 16px; }
+  .ok { color: var(--accent); font-weight: 700; } .bad { color: #b3261e; font-weight: 700; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Life Moments</h1>
+  <p class="sub">Proof of concept: the bank notices a life event and offers one helpful next step. Synthetic data only.</p>
+  <nav role="tablist">
+    <button role="tab" aria-selected="true" data-tab="phone">Phone view</button>
+    <button role="tab" aria-selected="false" data-tab="replay">Replay</button>
+    <button role="tab" aria-selected="false" data-tab="admin">Dashboard</button>
+  </nav>
+</header>
+<main>
+  <section id="tab-phone"></section>
+  <section id="tab-replay" hidden></section>
+  <section id="tab-admin" hidden></section>
+</main>
+
+<script>
+"use strict";
+// ---- tiny helpers: all server data goes through textContent (merchant names, chat text are untrusted)
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") el.className = v; else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const kid of kids.flat(Infinity)) if (kid != null && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+  return el;
+}
+const $ = (s) => document.querySelector(s);
+const clear = (el) => { while (el.firstChild) el.removeChild(el.firstChild); return el; };
+const pct = (x) => (x == null ? "-" : Math.round(x * 100) + "%");
+const title = (s) => (s ? s.replace(/_/g, " ") : "-");
+
+const HERO = "C0001";   // the demo customer that is signed in automatically
+// ---- auth state lives in memory only (nothing in localStorage; a reload logs out)
+const auth = { customerToken: null, customerId: null, adminToken: null, manual: false };
+async function api(path, { method = "GET", body, token } = {}) {
+  const res = await fetch(path, { method, headers: { "Content-Type": "application/json",
+    ...(token ? { Authorization: "Bearer " + token } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  let data = null; try { data = await res.json(); } catch (_) { /* empty body */ }
+  if (!res.ok) { const e = new Error((data && data.detail) || "Something went wrong"); e.status = res.status; throw e; }
+  return data;
+}
+const standinBanner = (src) => (src && src.startsWith("demo rules")
+  ? h("div", { class: "banner" }, "Demo mode: these suggestions come from simple built-in rules, not from an AI model.") : null);
+
+// ---- tabs
+document.querySelectorAll("nav button").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll("nav button").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+  for (const t of ["phone", "replay", "admin"]) $("#tab-" + t).hidden = t !== b.dataset.tab;
+  if (b.dataset.tab === "replay") renderReplay();
+}));
+
+// =================================================================== 1. PHONE
+const phone = { view: "home", suggestion: null, why: null, confirmation: null, error: "", whyOpen: false };
+
+function phoneFrame(...kids) {
+  return h("div", { class: "stage" }, h("div", { class: "phone" }, h("div", { class: "notch" }),
+    h("div", { class: "screen" }, kids)));
+}
+
+async function tryDemoLogin() {
+  if (auth.manual) return false;
+  try {
+    const t = await api("/auth/demo-login", { method: "POST" });
+    auth.customerToken = t.access_token; auth.customerId = HERO;
+    return true;
+  } catch (_) { return false; }     // demo login switched off on the server: fall back to the login form
+}
+
+async function renderPhone() {
+  const root = clear($("#tab-phone"));
+  if (!auth.customerToken && !(await tryDemoLogin())) return root.append(phoneLogin());
+  if (phone.view === "confirm") return root.append(phoneConfirm());
+  if (!phone.suggestion) {
+    try { phone.suggestion = await api(`/customers/${auth.customerId}/suggestion`, { token: auth.customerToken }); }
+    catch (e) { if (e.status === 401) return logout(); phone.error = e.message; }
+  }
+  root.append(phoneHome());
+}
+
+function phoneLogin() {
+  const id = h("input", { type: "text", id: "cid", autocomplete: "username", placeholder: "C0001", maxlength: "5" });
+  const pin = h("input", { type: "password", id: "pin", autocomplete: "current-password", inputmode: "numeric", maxlength: "32" });
+  const err = h("div", { class: "err", role: "alert" });
+  const go = async (ev) => {
+    ev.preventDefault(); err.textContent = "";
+    try {
+      const t = await api("/auth/login", { method: "POST", body: { customer_id: id.value.trim().toUpperCase(), pin: pin.value } });
+      auth.customerToken = t.access_token; auth.customerId = id.value.trim().toUpperCase();
+      Object.assign(phone, { view: "home", suggestion: null, why: null, whyOpen: false, error: "" });
+      renderPhone();
+    } catch (e) { err.textContent = e.status === 429 ? "Too many attempts. Please wait a few minutes." : "Customer id or PIN is not correct."; }
+  };
+  return phoneFrame(h("div", { class: "topbar" }, h("b", {}, "Bank app"), h("span", { class: "pill grey" }, "demo")),
+    h("form", { class: "card", onsubmit: go },
+      h("b", {}, "Log in"), h("label", { for: "cid" }, "Customer id"), id,
+      h("label", { for: "pin" }, "PIN"), pin, err,
+      h("div", { class: "stack" }, h("button", { class: "btn", type: "submit" }, "Log in"))),
+    h("p", { class: "muted", style: "font-size:12px" }, "Demo customers and PINs are listed in the README."));
+}
+
+function phoneHome() {
+  const s = phone.suggestion;
+  const out = [h("div", { class: "topbar" }, h("b", {}, s && s.first_name ? "Hello " + s.first_name : "Hello"), h("button", { class: "link", onclick: logout }, auth.customerId === HERO && !auth.manual ? "Switch customer" : "Log out")),
+    h("div", { class: "muted", style: "font-size:12px;margin:-6px 0 10px" }, "Customer " + auth.customerId + " · demo date 30 Sep 2026")];
+  if (phone.error) out.push(h("div", { class: "err" }, phone.error));
+  if (!s || !s.available) {
+    out.push(h("div", { class: "card" }, h("b", {}, "No suggestions right now"),
+      h("p", { class: "muted" }, "When something in your life changes and we can help, Kate will let you know here.")));
+  } else if (s.status === "accepted") {
+    out.push(h("div", { class: "card" }, h("b", {}, "You accepted this suggestion"), h("p", { class: "muted" }, "Everything is taken care of (demo).")));
+  } else if (s.status !== "open") {
+    out.push(h("div", { class: "card" }, h("b", {}, "Understood"),
+      h("p", { class: "muted" }, s.status === "not_me" ? "We will not suggest this again for a long while." : "We will stay quiet for a couple of weeks.")));
+  } else {
+    const primary = !s.top_need ? "Yes, contact me" : (s.event_type === "moving_house" && s.top_need !== "budget_check" ? "Update everything" : "Yes, let's do it");
+    out.push(h("div", { class: "card kate" },
+      h("div", { class: "who" }, h("span", { class: "avatar" }, "K"), "Kate", h("span", { class: "pill grey" }, title(s.channel))),
+      h("p", { style: "margin:0" }, s.message),
+      h("div", { class: "stack" },
+        h("button", { class: "btn", onclick: () => act("accept") }, primary),
+        h("button", { class: "btn ghost", onclick: () => act("not_now") }, "Not now"),
+        h("button", { class: "btn plain", onclick: () => act("not_me") }, "This isn't me")),
+      h("button", { class: "link", onclick: toggleWhy }, phone.whyOpen ? "Hide explanation" : "Why am I seeing this?"),
+      phone.whyOpen ? whyPanel() : null));
+  }
+  return phoneFrame(out);
+}
+
+function whyPanel() {
+  const w = phone.why;
+  if (!w) return h("p", { class: "muted" }, "Loading…");
+  return h("div", {}, standinBanner(w.analysis_source),
+    h("p", { style: "margin:6px 0" }, w.why),
+    h("div", { class: "muted", style: "font-size:12px" }, "Confidence: " + pct(w.confidence) + " · Source: " + w.analysis_source),
+    h("ul", { class: "clean" }, w.evidence.map((e) => h("li", {}, h("b", {}, e.when.slice(0, 10) + " "), e.text))),
+    h("div", { class: "muted", style: "font-size:12px;margin-top:8px" }, "Data we looked at: " + (w.data_categories_used.join(", ") || "none")),
+    h("div", { class: "muted", style: "font-size:12px" }, w.privacy_note));
+}
+
+async function toggleWhy() {
+  phone.whyOpen = !phone.whyOpen;
+  if (phone.whyOpen && !phone.why) {
+    renderPhone();   // shows "Loading…" while the explanation is fetched
+    try { phone.why = await api(`/customers/${auth.customerId}/why/${phone.suggestion.decision_id}`, { token: auth.customerToken }); }
+    catch (e) { phone.why = { why: e.message, confidence: null, evidence: [], data_categories_used: [], privacy_note: "", analysis_source: "" }; }
+  }
+  renderPhone();
+}
+
+async function act(kind) {
+  const s = phone.suggestion, base = `/customers/${auth.customerId}`;
+  try {
+    if (kind === "accept") {
+      phone.confirmation = await api(`${base}/actions/${s.decision_id}/accept`, { method: "POST", token: auth.customerToken });
+      phone.view = "confirm";
+    } else {
+      await api(`${base}/feedback`, { method: "POST", token: auth.customerToken, body: { decision_id: s.decision_id, response: kind } });
+      phone.suggestion = null;
+    }
+    phone.error = "";
+  } catch (e) { if (e.status === 401) return logout(); phone.error = e.message; phone.suggestion = null; }
+  renderPhone();
+}
+
+function phoneConfirm() {
+  const c = phone.confirmation;
+  return phoneFrame(h("div", { class: "card", style: "margin-top:24px" }, h("div", { class: "big" }, "✓"),
+    h("h2", { style: "text-align:center" }, c.title),
+    h("ul", { class: "clean" }, c.items.map((i) => h("li", {}, h("span", { class: "tick" }, "✓"), i))),
+    h("p", { class: "muted", style: "font-size:12px" }, c.note),
+    h("div", { class: "stack" }, h("button", { class: "btn", onclick: () => { phone.view = "home"; phone.suggestion = null; renderPhone(); } }, "Done"))));
+}
+
+function logout() {
+  auth.customerToken = auth.customerId = null;
+  auth.manual = true;     // do not auto-login again until the page is reloaded
+  Object.assign(phone, { view: "home", suggestion: null, why: null, confirmation: null, whyOpen: false, error: "" });
+  renderPhone();
+}
+
+// =================================================================== 2. REPLAY
+const replay = { data: null, idx: 0, timer: null };
+const REPLAY_FROM = "2026-09-08", REPLAY_TO = "2026-09-30";
+const dates = (() => { const out = []; for (let d = new Date(REPLAY_FROM + "T00:00:00Z"); d <= new Date(REPLAY_TO + "T00:00:00Z"); d = new Date(d.getTime() + 864e5)) out.push(d.toISOString().slice(0, 10)); return out; })();
+
+async function renderReplay() {
+  const root = clear($("#tab-replay"));
+  if (!replay.data) {
+    if (!auth.customerToken && !auth.adminToken) await tryDemoLogin();
+    const token = auth.adminToken || (auth.customerId === HERO ? auth.customerToken : null);
+    if (!token) return root.append(h("div", { class: "card" }, h("b", {}, "Olivier's replay (customer C0001)"),
+      h("p", { class: "muted" }, "Log in as admin (bottom of the Dashboard tab), or as C0001 on the Phone tab, then come back here.")));
+    try {
+      const path = auth.adminToken ? `/admin/customers/${HERO}/timeline` : `/customers/${HERO}/timeline`;
+      replay.data = await api(path + "?as_of=" + REPLAY_TO, { token });
+      replay.idx = 0;
+    } catch (e) { return root.append(h("div", { class: "err" }, e.message)); }
+  }
+  const T = replay.data, date = dates[replay.idx];
+  const day = T.days.find((d) => d.as_of === date);
+  const seen = T.signals.filter((s) => s.occurred_at.slice(0, 10) <= date);
+  const conf = day && day.confidence != null ? day.confidence : 0;
+
+  const slider = h("input", { type: "range", min: "0", max: String(dates.length - 1), value: String(replay.idx), "aria-label": "Date",
+    oninput: (e) => { replay.idx = +e.target.value; renderReplay(); } });
+  const play = h("button", { class: "btn ghost", style: "width:auto;padding:6px 14px", onclick: togglePlay }, replay.timer ? "Pause" : "Play");
+
+  let badge;
+  if (!day || !day.flagged) badge = h("span", { class: "pill grey" }, "no signals yet");
+  else if (day.action === "contact") badge = h("span", { class: "pill solid" }, "contact via " + title(day.channel));
+  else if (day.action === "wait") badge = h("span", { class: "pill" }, "wait · " + title(day.reason));
+  else badge = h("span", { class: "pill grey" }, "suppressed · " + title(day.reason));
+
+  // confidence curve up to the selected day (only days where the engine judged the customer)
+  const pts = T.days.filter((d) => d.as_of >= REPLAY_FROM && d.as_of <= date && d.confidence != null);
+  const W = 300, H = 90, x = (d) => (dates.indexOf(d) / (dates.length - 1)) * W, y = (c) => H - 6 - c * (H - 12);
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg"); svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("class", "spark");
+  const line = (attrs) => { const l = document.createElementNS(svgNS, "line"); for (const k in attrs) l.setAttribute(k, attrs[k]); return l; };
+  svg.append(line({ x1: 0, x2: W, y1: y(0.75), y2: y(0.75), stroke: "currentColor", "stroke-dasharray": "4 4", opacity: ".4" }));
+  if (pts.length) { const p = document.createElementNS(svgNS, "polyline");
+    p.setAttribute("points", pts.map((d) => `${x(d.as_of).toFixed(1)},${y(d.confidence).toFixed(1)}`).join(" "));
+    p.setAttribute("fill", "none"); p.setAttribute("stroke", "var(--accent)"); p.setAttribute("stroke-width", "2.5"); svg.append(p); }
+
+  root.append(standinBanner(T.analysis_source), h("div", { class: "card", style: "margin-bottom:16px" },
+    h("div", { style: "display:flex;justify-content:space-between;align-items:center;gap:12px" },
+      h("div", {}, h("b", {}, "Olivier's week, day by day"), h("div", { class: "muted", style: "font-size:13px" }, "Customer C0001 · home city " + T.home_city)),
+      play),
+    h("div", { style: "display:flex;justify-content:space-between;margin:12px 0 4px" }, h("b", {}, date), badge), slider),
+    h("div", { class: "grid2" },
+      h("div", { class: "card" }, h("h2", {}, "Signals so far (" + seen.length + ")"),
+        seen.length ? seen.map((s) => h("div", { class: "sig" }, h("time", {}, s.occurred_at.slice(0, 10)),
+          h("span", { class: "pill" + (s.strength === "strong" ? " solid" : " grey") }, s.strength), h("span", {}, s.text))) : h("p", { class: "muted" }, "Nothing unusual yet.")),
+      h("div", { class: "card" }, h("h2", {}, "Confidence"),
+        h("div", { style: "display:flex;justify-content:space-between;font-size:13px" }, h("span", {}, pct(conf)), h("span", { class: "muted" }, "threshold 75%")),
+        h("div", { class: "bar" }, h("i", { style: `width:${Math.round(conf * 100)}%` }), h("u", { style: "left:75%" })), svg,
+        day && day.top_need ? h("p", { style: "margin:8px 0 0" }, "Top need: ", h("b", {}, title(day.top_need))) : null)));
+}
+function togglePlay() {
+  if (replay.timer) { clearInterval(replay.timer); replay.timer = null; }
+  else { if (replay.idx >= dates.length - 1) replay.idx = 0;
+    replay.timer = setInterval(() => { if (replay.idx >= dates.length - 1) { clearInterval(replay.timer); replay.timer = null; } else replay.idx++; renderReplay(); }, 700); }
+  renderReplay();
+}
+
+// =================================================================== 3. ADMIN
+function adminLoginCard(errMsg) {
+  const secret = h("input", { type: "password", id: "sec", autocomplete: "off" });
+  const err = h("div", { class: "err", role: "alert" }, errMsg || "");
+  return h("form", { class: "card", style: "max-width:420px", onsubmit: async (ev) => {
+    ev.preventDefault();
+    try { auth.adminToken = (await api("/auth/admin-login", { method: "POST", body: { admin_secret: secret.value } })).access_token; replay.data = null; renderAdmin(); }
+    catch (e) { renderAdmin(e.status === 429 ? "Too many attempts. Please wait a few minutes." : "Admin secret is not correct."); }
+  } }, h("b", {}, "Admin login"), h("p", { class: "muted", style: "margin:4px 0 0;font-size:13px" }, "Only needed for the Replay view."),
+    h("label", { for: "sec" }, "Admin secret"), secret, err,
+    h("div", { class: "stack" }, h("button", { class: "btn", type: "submit" }, "Log in as admin")));
+}
+
+async function renderAdmin(errMsg) {
+  const root = clear($("#tab-admin"));
+  let d;
+  try { d = await api(auth.adminToken ? "/admin/dashboard" : "/public/dashboard", { token: auth.adminToken }); }
+  catch (e) {
+    if (auth.adminToken) { auth.adminToken = null; return renderAdmin("Session expired, please log in again."); }
+    // public dashboard switched off on the server: fall back to the admin login
+    return root.append(h("div", { class: "banner" }, "The dashboard requires an admin login."), adminLoginCard(errMsg));
+  }
+  const f = d.funnel, max = f.customers;
+  const bars = (obj, total) => Object.entries(obj).map(([k, v]) => h("div", { class: "hb" }, h("span", {}, title(k)),
+    h("div", { class: "bar" }, h("i", { style: `width:${Math.max(2, (v / total) * 100)}%` })), h("b", {}, v)));
+  const acc = d.accuracy;
+  const money = (v) => (v == null ? "price not set" : "$" + Number(v).toLocaleString());
+  const P = d.projection, pc = P.daily_cost_usd;
+  root.append(h("div", { class: "gap" },
+    h("div", { class: "banner" }, "Synthetic data: the generator plants clean signals, so near-perfect scores are expected. The hard cases below are the real test."),
+    d.llm.standin_in_use ? h("div", { class: "banner" }, "The decisions shown were produced by the built-in stand-in rules, not by an LLM. Accuracy and cost figures are not LLM results.") : null,
+    h("div", { class: "card" }, h("h2", {}, "Funnel (customers counted once)"),
+      h("div", { class: "kpis" }, [["customers", "Customers"], ["flagged", "Flagged by triage"], ["judged", "Judged"], ["confident", "Confident"], ["contacted", "Contacted"]]
+        .map(([k, l]) => h("div", { class: "kpi" }, h("b", {}, f[k]), h("span", {}, l)))),
+      h("div", { style: "margin-top:12px" }, bars({ customers: f.customers, flagged: f.flagged, judged: f.judged, confident: f.confident, contacted: f.contacted }, max))),
+    h("div", { class: "grid2" },
+      h("div", { class: "card" }, h("h2", {}, "Outcome per flagged customer"), bars(d.outcome_by_customer, f.flagged),
+        h("p", { class: "muted", style: "font-size:12px" }, "Each flagged customer is counted once: contacted, or the latest reason they were not. Contacts with care rules: " +
+          (Object.entries(d.contact_modifiers).map(([k, v]) => title(k) + " " + v).join(", ") || "none"))),
+      h("div", { class: "card" }, h("h2", {}, "Events contacted, by type"), bars(d.events_contacted, Math.max(...Object.values(d.events_contacted), 1)))),
+    h("div", { class: "card" }, h("h2", {}, "LLM usage, cost and projection at " + P.customers.toLocaleString() + " customers"),
+      h("table", {}, h("tr", {}, ["Model", "Calls", "Cache hits", "Tokens in", "Tokens out", "Est. cost"].map((x) => h("th", {}, x))),
+        d.llm.usage.map((u) => h("tr", {}, h("td", {}, u.model + (u.is_standin ? " (not an LLM)" : "")), h("td", {}, u.calls), h("td", {}, u.cache_hits),
+          h("td", {}, u.input_tokens), h("td", {}, u.output_tokens), h("td", {}, money(u.estimated_cost_usd))))),
+      h("table", { style: "margin-top:12px" }, h("tr", {}, ["Per day at scale", "LLM calls", "Cost"].map((x) => h("th", {}, x))),
+        [["no_triage", "Every customer, no triage"], ["with_triage", "Triage only"], ["with_triage_and_fingerprint_reuse", "Triage + re-judge only on new evidence"]]
+          .map(([k, l]) => h("tr", {}, h("td", {}, l), h("td", {}, P.daily_llm_calls[k].toLocaleString()), h("td", {}, pc ? money(pc[k]) : "price not set")))),
+      h("p", { class: "muted", style: "font-size:12px" }, "Assumptions: " + P.assumptions.tokens_in_per_call + " input / " + P.assumptions.tokens_out_per_call + " output tokens per call (" +
+        P.assumptions.tokens_source + "); price: " + (typeof P.assumptions.price_per_1m_usd === "string" ? P.assumptions.price_per_1m_usd : JSON.stringify(P.assumptions.price_per_1m_usd)) + ". " + P.assumptions.note)),
+    h("div", { class: "card" }, h("h2", {}, "Accuracy per event type"),
+      acc ? [h("table", {}, h("tr", {}, ["Event", "Planted", "Detected", "Precision", "Recall", "Median days to contact"].map((x) => h("th", {}, x))),
+        Object.entries(acc.per_event).map(([k, m]) => h("tr", {}, h("td", {}, title(k)), h("td", {}, m.planted), h("td", {}, m.detected), h("td", {}, m.precision), h("td", {}, m.recall), h("td", {}, m.median_days_to_contact ?? "-")))),
+        h("p", { class: "muted", style: "font-size:12px" }, "Triage recall " + acc.triage_recall + " · customers without an event flagged by triage: " + acc.none_flagged_by_triage + " of " + acc.none_customers + ". " + acc.label)]
+        : h("p", { class: "muted" }, "Run scripts/evaluate.py to produce data/eval_report.json.")),
+    h("div", { class: "card" }, h("h2", {}, "Hard cases D001-D007: expected vs actual"),
+      h("table", {}, h("tr", {}, ["Customer", "Expected", "Actual", "Event / confidence", ""].map((x) => h("th", {}, x))),
+        d.hard_cases.map((c) => h("tr", {}, h("td", {}, c.customer_id + (c.name ? " " + c.name : "")),
+          h("td", {}, JSON.stringify(c.expected)), h("td", {}, c.actual ? JSON.stringify(c.actual) + " on " + c.decision_date : "no decision"),
+          h("td", {}, c.actual ? title(c.event_type) + " · " + pct(c.confidence) : "-"), h("td", { class: c.ok ? "ok" : "bad" }, c.ok ? "match" : "MISMATCH")))),
+      h("p", { class: "muted", style: "font-size:12px" }, "Expected contact = compared with the customer's first contact decision; other cases = decision on " + d.as_of + ".")),
+    auth.adminToken ? null : adminLoginCard(errMsg)));
+}
+
+renderPhone(); renderAdmin();
+</script>
+</body>
+</html>

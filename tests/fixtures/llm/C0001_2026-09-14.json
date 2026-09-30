@@ -1,0 +1,59 @@
+{
+ "customer_id": "C0001",
+ "as_of": "2026-09-14",
+ "model": "gpt-4.1-mini",
+ "prompt_hash": "6520951cbb225266587dbf70310f899a058be809be06360e15e642dcfd2f244e",
+ "usage": {
+  "input_tokens": 2776,
+  "output_tokens": 277
+ },
+ "output": {
+  "life_event": "moving_house",
+  "stage": "in_progress",
+  "confidence": 0.85,
+  "evidence": [
+   {
+    "ref_id": "tx:32",
+    "note": "Rent deposit payment of EUR 1800.00"
+   },
+   {
+    "ref_id": "tx:33",
+    "note": "Payment to moving company Verhuizingen Peeters of EUR 540.00"
+   },
+   {
+    "ref_id": "ev:1",
+    "note": "Customer searched 'change address'"
+   }
+  ],
+  "needs": [
+   {
+    "need_id": "address_update",
+    "priority": 1,
+    "reason": "Customer searched for changing address"
+   },
+   {
+    "need_id": "home_insurance_transfer",
+    "priority": 2,
+    "reason": "Customer holds Home Insurance product and is moving"
+   },
+   {
+    "need_id": "budget_check",
+    "priority": 3,
+    "reason": "Customer is moving and has negative net cashflow in last 30 days"
+   },
+   {
+    "need_id": "savings_buffer",
+    "priority": 4,
+    "reason": "Customer has negative net cashflow in last 30 days"
+   }
+  ],
+  "top_action": "address_update",
+  "suggested_channel": "kate_message",
+  "urgency": "medium",
+  "message": "We see you're moving and looking to update your address. Let's help you update your address with us to keep your accounts up to date.",
+  "why": "We noticed a rent deposit payment, a moving company payment, and a search for changing address, indicating you are moving house.",
+  "financial_stress_suspected": false,
+  "sensitive": false,
+  "rejection_reason": null
+ }
+}

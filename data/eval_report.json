@@ -1,0 +1,117 @@
+{
+ "label": "synthetic data: the generator plants clean signals, so near-perfect scores are expected; the hard cases are the real test",
+ "customers_evaluated": 400,
+ "judge_models": [
+  "gpt-4.1-mini"
+ ],
+ "standin_judge": false,
+ "per_event": {
+  "moving_house": {
+   "planted": 11,
+   "detected": 11,
+   "false_positives": 0,
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "median_days_to_contact": 2,
+   "days_to_contact": [
+    0,
+    0,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  },
+  "new_baby": {
+   "planted": 6,
+   "detected": 6,
+   "false_positives": 0,
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "median_days_to_contact": 4.0,
+   "days_to_contact": [
+    2,
+    4,
+    4,
+    4,
+    6,
+    6
+   ]
+  },
+  "new_job": {
+   "planted": 11,
+   "detected": 10,
+   "false_positives": 0,
+   "precision": 1.0,
+   "recall": 0.909,
+   "f1": 0.952,
+   "median_days_to_contact": 7.0,
+   "days_to_contact": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+   ]
+  },
+  "retirement_approaching": {
+   "planted": 14,
+   "detected": 14,
+   "false_positives": 0,
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "median_days_to_contact": 6.0,
+   "days_to_contact": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    9
+   ]
+  },
+  "starting_business": {
+   "planted": 7,
+   "detected": 7,
+   "false_positives": 0,
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "median_days_to_contact": 4,
+   "days_to_contact": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+   ]
+  }
+ },
+ "triage_recall": 1.0,
+ "none_customers": 351,
+ "none_flagged_by_triage": 0,
+ "none_contacted": 0
+}

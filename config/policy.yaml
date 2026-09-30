@@ -1,0 +1,12 @@
+confidence_threshold: 0.75
+max_contacts_per_7_days: 1
+max_contacts_per_event_30_days: 1   # no second contact for the same event within 30 days (already_contacted_for_event)
+sensitive_min_confidence: 0.5       # human_support path still needs at least this confidence
+backoff_days: {not_now: 14, not_me: 60, accepted: 30}
+lookback_days: 30
+# No balance in the data. Stress = the LLM flag OR (30-day net cashflow EXCLUDING the detected event's own
+# signal transactions is below the limit AND income_band is in income_bands).
+stress_rules: {adjusted_net_cashflow_30d_below: 0, income_bands: [low]}
+sales_needs: [savings_buffer, child_savings, business_insurance, pension_savings_topup]   # blocked when stress suspected
+sensitive_event_types: [bereavement, divorce, health, sensitive_other]
+channels: {voice_enabled: false, voice_min_urgency: high}

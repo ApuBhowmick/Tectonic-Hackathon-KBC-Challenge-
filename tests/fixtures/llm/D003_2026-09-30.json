@@ -1,0 +1,75 @@
+{
+ "customer_id": "D003",
+ "as_of": "2026-09-30",
+ "model": "gpt-4.1-mini",
+ "prompt_hash": "78691bcb34b7408ba111091b8e8fdddd9f432c1b8e6c956da52c0a5b15a49ee6",
+ "usage": {
+  "input_tokens": 3197,
+  "output_tokens": 380
+ },
+ "output": {
+  "life_event": "moving_house",
+  "stage": "in_progress",
+  "confidence": 0.9,
+  "evidence": [
+   {
+    "ref_id": "tx:24173",
+    "note": "Rent deposit payment indicates moving house."
+   },
+   {
+    "ref_id": "tx:24175",
+    "note": "Payment to moving company supports moving house event."
+   },
+   {
+    "ref_id": "ev:51",
+    "note": "Customer searched for 'change address'."
+   },
+   {
+    "ref_id": "kate:51",
+    "note": "Customer asked to update address with the bank."
+   },
+   {
+    "ref_id": "tx:24180",
+    "note": "Furniture spending in new city (Gent) supports moving."
+   },
+   {
+    "ref_id": "tx:24184",
+    "note": "New energy contract in new city (Gent) supports moving."
+   },
+   {
+    "ref_id": "tx:24184",
+    "note": "Transactions shifted to new city Gent from Brugge."
+   }
+  ],
+  "needs": [
+   {
+    "need_id": "address_update",
+    "priority": 1,
+    "reason": "Customer is updating address with the bank."
+   },
+   {
+    "need_id": "home_insurance_transfer",
+    "priority": 2,
+    "reason": "Customer holds Home Insurance product and is moving."
+   },
+   {
+    "need_id": "utilities_setup",
+    "priority": 3,
+    "reason": "New energy contract suggests utilities setup is relevant."
+   },
+   {
+    "need_id": "budget_check",
+    "priority": 4,
+    "reason": "Moving affects monthly budget."
+   }
+  ],
+  "top_action": "address_update",
+  "suggested_channel": "kate_message",
+  "urgency": "medium",
+  "message": "We see you're moving and want to update your address. Let's make sure your bank records are up to date. Would you like help with this now?",
+  "why": "We noticed a rent deposit payment, moving company payment, address search, and your request to update your address with the bank, plus new city transactions and a new energy contract.",
+  "financial_stress_suspected": false,
+  "sensitive": false,
+  "rejection_reason": "Previous feedback indicated 'not_now' for moving house event, so we respect your timing preference."
+ }
+}

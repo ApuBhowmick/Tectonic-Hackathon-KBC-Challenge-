@@ -1,0 +1,51 @@
+{
+ "customer_id": "C0001",
+ "as_of": "2026-09-10",
+ "model": "gpt-4.1-mini",
+ "prompt_hash": "3f9d7d9eca99bf0731aba6a3d064c0fad138aa16467d07274cafe5728a3985e5",
+ "usage": {
+  "input_tokens": 2572,
+  "output_tokens": 224
+ },
+ "output": {
+  "life_event": "moving_house",
+  "stage": "in_progress",
+  "confidence": 0.7,
+  "evidence": [
+   {
+    "ref_id": "tx:32",
+    "note": "Strong signal: rent deposit payment indicating moving house"
+   }
+  ],
+  "needs": [
+   {
+    "need_id": "address_update",
+    "priority": 1,
+    "reason": "Important to update your address after moving"
+   },
+   {
+    "need_id": "home_insurance_transfer",
+    "priority": 2,
+    "reason": "You hold Home Insurance which should be transferred to the new address"
+   },
+   {
+    "need_id": "utilities_setup",
+    "priority": 3,
+    "reason": "No new energy contract yet, so setting up utilities is relevant"
+   },
+   {
+    "need_id": "budget_check",
+    "priority": 4,
+    "reason": "Check your new monthly budget after moving"
+   }
+  ],
+  "top_action": "address_update",
+  "suggested_channel": "kate_message",
+  "urgency": "medium",
+  "message": "We noticed you paid a rent deposit, which usually means moving. Please update your address with us to keep your details current.",
+  "why": "We noticed a rent deposit payment, a strong sign of moving house (tx:32).",
+  "financial_stress_suspected": false,
+  "sensitive": false,
+  "rejection_reason": null
+ }
+}

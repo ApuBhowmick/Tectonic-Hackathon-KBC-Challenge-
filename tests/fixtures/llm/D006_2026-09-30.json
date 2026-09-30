@@ -1,0 +1,46 @@
+{
+ "customer_id": "D006",
+ "as_of": "2026-09-30",
+ "model": "gpt-4.1-mini",
+ "prompt_hash": "229e8718b083a88c501446d72684fdd2101f4ac2dee040f018658a572a587455",
+ "usage": {
+  "input_tokens": 2610,
+  "output_tokens": 229
+ },
+ "output": {
+  "life_event": "moving_house",
+  "stage": "in_progress",
+  "confidence": 0.7,
+  "evidence": [
+   {
+    "ref_id": "tx:24365",
+    "note": "Strong signal: rent deposit payment of EUR 1600 on 2026-09-28"
+   }
+  ],
+  "needs": [
+   {
+    "need_id": "address_update",
+    "priority": 1,
+    "reason": "Always relevant after moving house"
+   },
+   {
+    "need_id": "budget_check",
+    "priority": 2,
+    "reason": "Check your new monthly budget after moving"
+   },
+   {
+    "need_id": "savings_buffer",
+    "priority": 3,
+    "reason": "Net cashflow negative in last 30 days, may need to cover moving costs"
+   }
+  ],
+  "top_action": "address_update",
+  "suggested_channel": "kate_message",
+  "urgency": "medium",
+  "message": "We noticed you recently paid a rent deposit. To help with your move, please update your address with us to keep your details current.",
+  "why": "We noticed a rent deposit payment, a strong sign you are moving house (tx:24365). Updating your address is important to keep your banking details accurate during your move.",
+  "financial_stress_suspected": false,
+  "sensitive": false,
+  "rejection_reason": null
+ }
+}

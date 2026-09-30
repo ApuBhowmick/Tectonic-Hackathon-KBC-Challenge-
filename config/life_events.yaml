@@ -1,0 +1,75 @@
+# Life events: signals, strengths and needs catalog. Matching is case-insensitive on merchant,
+# app-event detail and Kate text; `category` is a hint only (see CLAUDE.md "category quirks").
+triage: {flag_if: "any strong signal, or at least 2 distinct weak/medium signals"}
+
+moving_house:
+  description: Customer is moving to a new home.
+  signals:
+    rent_deposit:           {source: transactions, match: {merchant_contains: ["Rent Deposit"]}, strength: strong}
+    moving_company:         {source: transactions, match: {category: moving}, strength: strong}
+    address_search:         {source: app_events, match: {detail_contains: ["change address"]}, strength: strong}
+    kate_address_question:  {source: kate, match: {text_contains: ["address", "domicile"]}, strength: strong}
+    furniture_spend:        {source: transactions, match: {category: furniture}, strength: weak}
+    home_improvement_spend: {source: transactions, match: {category: "home improvement"}, strength: weak}
+    new_energy_contract:    {source: transactions, match: {merchant_contains: ["New Energy Supplier", "New Contract"]}, strength: medium}
+    city_shift:             {source: transactions, rule: "3+ transactions in the last 14 days in a city other than the home city", strength: medium}
+  needs:
+    address_update:          {title: Update your address everywhere, relevant_if: always}
+    home_insurance_transfer: {title: Move your home insurance to the new address, relevant_if: "'Home Insurance' in products_held", urgency_boost: true}
+    utilities_setup:         {title: Set up energy and internet, relevant_if: "no new_energy_contract signal yet"}
+    budget_check:            {title: Check your new monthly budget, relevant_if: always}
+    savings_buffer:          {title: Cover moving costs, relevant_if: "net_cashflow_30d < 0 or income_band == low", sales: true}
+
+new_baby:
+  description: Customer is expecting or has had a baby.
+  signals:
+    maternity_search:   {source: app_events, match: {detail_contains: ["maternity leave"]}, strength: strong}
+    baby_shop_spend:    {source: transactions, match: {merchant_contains: ["Dreambaby", "Babypark"]}, strength: strong}
+    child_benefit:      {source: transactions, match: {merchant_contains: ["Groeipakket"]}, strength: strong}
+    pharmacy_copay:     {source: transactions, match: {merchant_contains: ["Pharmacy Co-pay"]}, strength: weak}
+    kate_baby_question: {source: kate, match: {text_contains: ["baby"]}, strength: strong}
+  needs:
+    benefits_info:           {title: See which benefits you are entitled to, relevant_if: always}
+    family_insurance_review: {title: Review your insurance for your growing family, relevant_if: always}
+    budget_check:            {title: Check your new monthly budget, relevant_if: always}
+    child_savings:           {title: Start saving for your child, relevant_if: always, sales: true}
+
+new_job:
+  description: Customer started a new job.
+  signals:
+    employer_details_search: {source: app_events, match: {detail_contains: ["change employer details"]}, strength: strong}
+    new_employer_salary:     {source: transactions, match: {merchant_contains: ["Salary - New Employer"]}, strength: strong}
+    work_attire_spend:       {source: transactions, match: {merchant_contains: ["Business Attire"]}, strength: weak}
+    kate_new_job:            {source: kate, match: {text_contains: ["new job"]}, strength: strong}
+  needs:
+    salary_domiciliation:    {title: Move your salary to the right account, relevant_if: always}
+    employer_details_update: {title: Update your employer details, relevant_if: always}
+    group_insurance_info:    {title: Check your new employer's group insurance and pension, relevant_if: always}
+    budget_check:            {title: Check your monthly budget, relevant_if: always}
+
+starting_business:
+  description: Customer is starting a business or going freelance.
+  signals:
+    self_employed_search:    {source: app_events, match: {detail_contains: ["self-employed bank account"]}, strength: strong}
+    company_registration:    {source: transactions, match: {merchant_contains: ["Company Registration"]}, strength: strong}
+    business_setup_transfer: {source: transactions, match: {merchant_contains: ["Business Setup"]}, strength: strong}
+    business_software:       {source: transactions, match: {merchant_contains: ["Business Software"]}, strength: medium}
+    kate_freelancer:         {source: kate, match: {text_contains: ["freelancer", "self-employed"]}, strength: strong}
+  needs:
+    business_account:   {title: Open a business account, relevant_if: always}
+    vat_and_tax_info:   {title: Learn about VAT and social contributions, relevant_if: always}
+    business_insurance: {title: Insure your business, relevant_if: always, sales: true}
+    budget_check:       {title: Separate private and business budget, relevant_if: always}
+
+retirement_approaching:
+  description: Customer is preparing for retirement.
+  signals:
+    pension_search:             {source: app_events, match: {detail_contains: ["pension simulation"]}, strength: strong}
+    pension_simulation_request: {source: transactions, match: {merchant_contains: ["Pension Simulation Request"]}, strength: strong}
+    pension_savings_transfer:   {source: transactions, match: {merchant_contains: ["Transfer to Pension Savings"]}, strength: strong}
+    kate_pension_question:      {source: kate, match: {text_contains: ["pension", "retire"]}, strength: strong}
+  needs:
+    pension_projection_review:  {title: Review your pension projection, relevant_if: always}
+    retirement_advisor_meeting: {title: Talk to an advisor about retirement, relevant_if: always}
+    insurance_review:           {title: Review your insurance for retirement, relevant_if: always}
+    pension_savings_topup:      {title: Top up your pension savings, relevant_if: always, sales: true}

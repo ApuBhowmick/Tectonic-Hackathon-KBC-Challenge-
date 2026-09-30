@@ -1,0 +1,38 @@
+{
+ "customer_id": "D001",
+ "as_of": "2026-09-30",
+ "model": "gpt-4.1-mini",
+ "prompt_hash": "c154b0eae827294eb1fee293379759c7208597aa37134e2767287695e9ae94c0",
+ "usage": {
+  "input_tokens": 2804,
+  "output_tokens": 225
+ },
+ "output": {
+  "life_event": "none",
+  "stage": "none",
+  "confidence": 0.3,
+  "evidence": [
+   {
+    "ref_id": "tx:24054",
+    "note": "Furniture spend at IKEA (EUR 310.00) is a weak signal for moving house."
+   },
+   {
+    "ref_id": "tx:24056",
+    "note": "Additional furniture spend at IKEA (EUR 185.00) is a weak signal for moving house."
+   },
+   {
+    "ref_id": "tx:24058",
+    "note": "Home improvement spend at Paint Shop (EUR 64.00) is a weak signal for moving house."
+   }
+  ],
+  "needs": [],
+  "top_action": "none",
+  "suggested_channel": "none",
+  "urgency": "low",
+  "message": "We noticed some furniture and home improvement purchases recently. If you are planning a move, we are here to help when you need us.",
+  "why": "We noticed furniture and home improvement spending in Hasselt, but no strong signals of moving house like rent deposit or address change.",
+  "financial_stress_suspected": false,
+  "sensitive": false,
+  "rejection_reason": "Only weak signals of moving house without stronger evidence like rent deposit or address search."
+ }
+}

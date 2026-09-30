@@ -1,0 +1,34 @@
+{
+ "customer_id": "D002",
+ "as_of": "2026-09-30",
+ "model": "gpt-4.1-mini",
+ "prompt_hash": "af0711fff0f7d1b06fc43f1a52bd671d830a9686442d0dd84c02a14b2315ccfd",
+ "usage": {
+  "input_tokens": 2674,
+  "output_tokens": 174
+ },
+ "output": {
+  "life_event": "none",
+  "stage": "none",
+  "confidence": 0.3,
+  "evidence": [
+   {
+    "ref_id": "ev:50",
+    "note": "Customer searched 'change address' indicating possible interest in moving house."
+   },
+   {
+    "ref_id": "kate:50",
+    "note": "Kate message about helping mother update address, likely not the customer's own move."
+   }
+  ],
+  "needs": [],
+  "top_action": "none",
+  "suggested_channel": "none",
+  "urgency": "low",
+  "message": "If you are moving soon, we can help you update your address with us when you're ready.",
+  "why": "We noticed you searched for changing your address, but the message about updating an address is about your mother, not you personally.",
+  "financial_stress_suspected": false,
+  "sensitive": false,
+  "rejection_reason": "Kate message indicates address update is for mother, not the customer, so no moving event detected."
+ }
+}

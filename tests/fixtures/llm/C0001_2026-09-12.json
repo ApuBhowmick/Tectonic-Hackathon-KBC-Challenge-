@@ -1,0 +1,55 @@
+{
+ "customer_id": "C0001",
+ "as_of": "2026-09-12",
+ "model": "gpt-4.1-mini",
+ "prompt_hash": "d9e5d20ad4346c46ea4bb1dafcd421a629fb151f8d16acf3617dfaedc00052ee",
+ "usage": {
+  "input_tokens": 2673,
+  "output_tokens": 270
+ },
+ "output": {
+  "life_event": "moving_house",
+  "stage": "in_progress",
+  "confidence": 0.85,
+  "evidence": [
+   {
+    "ref_id": "tx:32",
+    "note": "Rent deposit payment indicates preparation for moving house."
+   },
+   {
+    "ref_id": "tx:33",
+    "note": "Payment to moving company confirms active moving process."
+   }
+  ],
+  "needs": [
+   {
+    "need_id": "address_update",
+    "priority": 1,
+    "reason": "Customer is moving house and needs to update address everywhere."
+   },
+   {
+    "need_id": "home_insurance_transfer",
+    "priority": 2,
+    "reason": "Customer holds Home Insurance and should transfer it to new address."
+   },
+   {
+    "need_id": "utilities_setup",
+    "priority": 3,
+    "reason": "No new energy contract signal yet, so utilities setup is relevant."
+   },
+   {
+    "need_id": "budget_check",
+    "priority": 4,
+    "reason": "Moving affects monthly budget, so a budget check is helpful."
+   }
+  ],
+  "top_action": "address_update",
+  "suggested_channel": "kate_message",
+  "urgency": "medium",
+  "message": "We see you're moving soon. Let's start by updating your address everywhere to keep your accounts up to date. Would you like help with this?",
+  "why": "We noticed a rent deposit payment and a moving company payment recently, indicating you are in the process of moving house (tx:32, tx:33).",
+  "financial_stress_suspected": false,
+  "sensitive": false,
+  "rejection_reason": null
+ }
+}
