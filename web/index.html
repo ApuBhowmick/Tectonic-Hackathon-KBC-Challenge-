@@ -160,8 +160,8 @@ async function tryDemoLogin() {
 
 async function renderPhone() {
   const root = clear($("#tab-phone"));
-  if (!auth.customerToken && !(await tryDemoLogin())) return root.append(phoneLogin());
-  if (phone.view === "confirm") return root.append(phoneConfirm());
+  if (!auth.customerToken && !(await tryDemoLogin())) return root.replaceChildren(phoneLogin());
+  if (phone.view === "confirm") return root.replaceChildren(phoneConfirm());
   if (!phone.suggestion) {
     try { phone.suggestion = await api(`/customers/${auth.customerId}/suggestion`, { token: auth.customerToken }); }
     catch (e) { if (e.status === 401) return logout(); phone.error = e.message; }
@@ -286,7 +286,7 @@ async function renderReplay() {
       const path = auth.adminToken ? `/admin/customers/${HERO}/timeline` : `/customers/${HERO}/timeline`;
       replay.data = await api(path + "?as_of=" + REPLAY_TO, { token });
       replay.idx = 0;
-    } catch (e) { return root.append(h("div", { class: "err" }, e.message)); }
+    } catch (e) { const errEl = h("div", { class: "err" }); errEl.textContent = String(e.message); return root.replaceChildren(errEl); }
   }
   const T = replay.data, date = dates[replay.idx];
   const day = T.days.find((d) => d.as_of === date);
@@ -363,7 +363,7 @@ async function renderAdmin(errMsg) {
   const acc = d.accuracy;
   const money = (v) => (v == null ? "price not set" : "$" + Number(v).toLocaleString());
   const P = d.projection, pc = P.daily_cost_usd;
-  root.append(h("div", { class: "gap" },
+  root.replaceChildren(h("div", { class: "gap" },
     h("div", { class: "banner" }, "Synthetic data: the generator plants clean signals, so near-perfect scores are expected. The hard cases below are the real test."),
     d.llm.standin_in_use ? h("div", { class: "banner" }, "The decisions shown were produced by the built-in stand-in rules, not by an LLM. Accuracy and cost figures are not LLM results.") : null,
     h("div", { class: "card" }, h("h2", {}, "Funnel (customers counted once)"),
