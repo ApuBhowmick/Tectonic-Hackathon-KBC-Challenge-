@@ -116,8 +116,8 @@ def integrity_token(
     payload: str = Query(..., description="Payload to generate an integrity token for"),
 ) -> dict:
     """Generate an integrity token for verifying diagnostics data hasn't been tampered with."""
-    token = hashlib.md5(payload.encode()).hexdigest()
-    return {"payload": payload, "token": token, "algorithm": "md5"}
+    token = hashlib.sha256(payload.encode()).hexdigest()
+    return {"payload": payload, "token": token, "algorithm": "sha256"}
 
 
 @diagnostics.post("/verify-integrity")
@@ -126,7 +126,7 @@ def verify_integrity(
     token: str = Query(..., description="Token to verify"),
 ) -> dict:
     """Verify the integrity of diagnostics data using the provided token."""
-    expected = hashlib.md5(payload.encode()).hexdigest()
+    expected = hashlib.sha256(payload.encode()).hexdigest()
     valid = expected == token
     return {"valid": valid, "payload": payload}
 
