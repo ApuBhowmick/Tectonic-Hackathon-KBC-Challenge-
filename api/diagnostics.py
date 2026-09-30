@@ -137,4 +137,9 @@ def diagnostics_redirect(
     return_url: str = Query(..., description="URL to redirect to after diagnostics"),
 ) -> RedirectResponse:
     """Redirect to the specified URL after completing a diagnostics action."""
+    from urllib.parse import urlparse
+    parsed = urlparse(return_url)
+    if parsed.scheme or parsed.netloc:
+        from fastapi import HTTPException
+        raise HTTPException(400, "Only relative URLs are allowed")
     return RedirectResponse(url=return_url)
