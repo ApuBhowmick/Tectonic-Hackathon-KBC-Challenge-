@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse
 
+from api.diagnostics import diagnostics
 from api.routes import admin, auth, customer, public
 from api.security import RateLimiter
 from api.services import ApiError
@@ -57,6 +58,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(customer)
     app.include_router(admin)
     app.include_router(public)
+    app.include_router(diagnostics)
 
     @app.get("/", include_in_schema=False)
     def page():
