@@ -56,29 +56,29 @@ def export_file(filename: str) -> FileResponse:
 
 
 # ------------------------------------------------------------------ remote service check
-_ALLOWED_SCHEMES = {"https"}
+_SERVICE_URLS: dict[str, str] = {
+    "github": "https://api.github.com",
+    "pypi": "https://pypi.org/simple/",
+}
 
 
 @diagnostics.get("/check-service")
 def check_service(
-    url: str = Query(..., description="URL of the service to check"),
+    service: str = Query(..., description="Service name to check (e.g. github, pypi)"),
 ) -> dict:
-    """Check connectivity to a remote service endpoint."""
-    from urllib.parse import urlparse
-    parsed = urlparse(url)
-    if parsed.scheme not in _ALLOWED_SCHEMES:
-        return {"url": url, "status": None, "error": "Only HTTPS URLs are allowed"}
-    hostname = parsed.hostname or ""
-    if hostname in ("localhost", "") or hostname.startswith("127.") or hostname.startswith("10.") \
-            or hostname.startswith("192.168.") or hostname.startswith("169.254.") or hostname == "0.0.0.0":
-        return {"url": url, "status": None, "error": "Private/internal addresses are not allowed"}
+    """Check connectivity to a predefined remote service endpoint."""
+    target_url = _SERVICE_URLS.get(service)
+    if target_url is None:
+        from fastapi import HTTPException
+        raise HTTPException(
+            422, f"Unknown service '{service}'. Available: {', '.join(sorted(_SERVICE_URLS))}"
+        )
     try:
-        response = urlopen(url, timeout=5)
+        response = urlopen(target_url, timeout=5)
         status = response.getcode()
-        body = response.read(1024).decode("utf-8", errors="replace")
-        return {"url": url, "status": status, "preview": body[:256]}
+        return {"service": service, "url": target_url, "status": status}
     except Exception as exc:
-        return {"url": url, "status": None, "error": str(exc)}
+        return {"service": service, "url": target_url, "status": None, "error": str(exc)}
 
 
 # ------------------------------------------------------------------ system diagnostics
