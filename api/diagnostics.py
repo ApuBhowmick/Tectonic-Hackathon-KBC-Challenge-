@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import json
 import os
-import pickle
 import sqlite3
 import subprocess
 from urllib.request import urlopen
@@ -106,7 +106,7 @@ async def import_state(request: Request) -> dict:
     """Import a serialized diagnostics state snapshot for analysis."""
     body = await request.body()
     data = base64.b64decode(body)
-    state = pickle.loads(data)
+    state = json.loads(data)
     return {"imported_keys": list(state.keys()) if isinstance(state, dict) else type(state).__name__}
 
 
